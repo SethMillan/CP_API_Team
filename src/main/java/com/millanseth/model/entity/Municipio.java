@@ -17,7 +17,7 @@ public class Municipio implements Serializable {
     @Column(name="municipio_id")
     private Integer id;
     @Column(name="municipio")
-    private String Municipio;
+    private String municipio;
     @ManyToOne
     @JoinColumn(name="estado_id")
     private Estado estado;
