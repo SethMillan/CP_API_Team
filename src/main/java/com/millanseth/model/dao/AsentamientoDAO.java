@@ -11,7 +11,7 @@ import java.util.List;
 public interface AsentamientoDAO extends CrudRepository <Asentamiento,Integer>{
     @Query("SELECT m FROM Asentamiento m JOIN FETCH m.codigoPostal WHERE m.codigoPostal.cp = :cpid")
     List<Asentamiento> findCPById(@Param("cpid")Integer cp);
-    @Query("SELECT m FROM Asentamiento m JOIN FETCH m.codigoPostal WHERE m.codigoPostal.municipio.id= :mcpioId AND m.codigoPostal.municipio.estado.idEdo =:edoId")
+    @Query("SELECT m FROM Asentamiento m JOIN FETCH m.codigoPostal WHERE m.codigoPostal.municipio.id= :mcpioId AND m.codigoPostal.municipio.estado.id =:edoId")
     List<Asentamiento> findCPByMcpioAndEdo(@Param("mcpioId")Integer idMcpio, @Param("edoId") Integer idEdo);
 
 
