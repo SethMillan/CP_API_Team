@@ -12,12 +12,12 @@ import java.io.Serializable;
 @ToString
 @Builder
 @Entity
-@Table(name = "tablaedo")
+@Table(name = "estados")
 public class Estado implements Serializable {
     @Id
-    @Column(name="id_Edo")
+    @Column(name="estado_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idEdo;
-    @Column(name="Estado")
+    @Column(name="estado")
     private String Estado;
 }
