@@ -37,32 +37,37 @@ public class Controller {
     @GetMapping("estados")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> showAll() {
+        try{
         List<Estado> listaEstados= estadoService.listAll();
         if (listaEstados==null){
             return new ResponseEntity<>(
                     MensajeResponse.builder()
-                            .error(true)
+                            .error(false)
                             .mensaje("No hay estados registrados")
                             .object(null).build(),
                     HttpStatus.OK);
-        }else{
+        }else {
             return new ResponseEntity<>(
                     MensajeResponse.builder()
                             .error(false)
-                            .mensaje("Estados encontrados :"+listaEstados.size())
+                            .mensaje("Estados encontrados :" + listaEstados.size())
                             .object(listaEstados)
                             .build()
-                    ,HttpStatus.OK);
+                    , HttpStatus.OK);
+        }
+        }catch(Exception exDt){
+            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+exDt).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("municipios")
-@ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> showAllMunicipios(){
-        List<MunicipioDto> listaMunicipios= municipioService.listAll().stream().map(municipio -> MunicipioDto.builder().idEdo(municipio.getEstado().getIdEdo()).idMcpio(municipio.getId()).Municipio(municipio.getMunicipio()).build()).toList();
+        try{
+        List<MunicipioDto> listaMunicipios= municipioService.listAll().stream().map(municipio -> MunicipioDto.builder().idEdo(municipio.getEstado().getId()).idMcpio(municipio.getId()).municipio(municipio.getMunicipio()).build()).toList();
         if (listaMunicipios==null){
             return new ResponseEntity<>(
                     MensajeResponse.builder()
-                            .error(true)
+                            .error(false)
                             .mensaje("No hay estados registrados")
                             .object(null).build(),
                     HttpStatus.OK);
@@ -75,6 +80,9 @@ public class Controller {
                             .build()
                     ,HttpStatus.OK);
         }
+        }catch (Exception ext){
+            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
     @GetMapping("codigospostales")
     @ResponseStatus(HttpStatus.OK)
@@ -83,7 +91,7 @@ public class Controller {
             List<CodigoPostal> listaCP = codigoService.listAll();
             List<CodigoPostalDto> listaDto = listaCP.stream()
                     .map(codigoPostal -> CodigoPostalDto.builder()
-                            .idEdo(codigoPostal.getMunicipio().getEstado().getIdEdo())
+                            .idEdo(codigoPostal.getMunicipio().getEstado().getId())
                             .estado(codigoPostal.getMunicipio().getEstado().getEstado())
                             .idMcpio(codigoPostal.getMunicipio().getId())
                             .municipio(codigoPostal.getMunicipio().getMunicipio())
@@ -92,7 +100,7 @@ public class Controller {
                     ).toList();
             return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Codigos totales "+listaDto.size()).object(listaDto).build(),HttpStatus.OK);
         }catch (Exception ext ){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.OK);
+            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("asentamientos")
@@ -105,12 +113,12 @@ public class Controller {
                             .estado(asentamiento.getCodigoPostal().getMunicipio().getEstado().getEstado())
                             .municipio(asentamiento.getCodigoPostal().getMunicipio().getMunicipio())
                             .codigoPostal(asentamiento.getCodigoPostal().getCp())
-                            .asentamiento(asentamiento.getAsenta())
+                            .asentamiento(asentamiento.getAsentamiento())
                             .build()
                     ).toList();
             return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Codigos totales "+listaDto.size()).object(listaDto).build(),HttpStatus.OK);
         }catch (Exception ext ){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.OK);
+            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -120,23 +128,28 @@ public class Controller {
     @GetMapping("estado/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> showById(@PathVariable Integer id) {
-        Estado estado= estadoService.findById(id);
-        if (estado==null){
-            return new ResponseEntity<>(
-                    MensajeResponse.builder().error(true).mensaje("El registro que intenta buscar no existe").object(null).build(),
-                    HttpStatus.NOT_FOUND);//en caso de no encontrarlo manda un objeto nulo y un mensaje de error
-        }else{
-            return new ResponseEntity<>(
-                    MensajeResponse.builder()
-                            .error(false)
-                            .mensaje("Encontrado")
-                            .object(
-                                    EstadoDto.builder()
-                                            .idEdo(estado.getIdEdo())
-                                            .Estado(estado.getEstado())
-                                            .build()
-                            ).build()
-                    ,HttpStatus.OK);
+        try {
+            Estado estado = estadoService.findById(id);
+            if (estado == null) {
+                return new ResponseEntity<>(
+                        MensajeResponse.builder().error(true).mensaje("El registro que intenta buscar no existe").object(null).build(),
+                        HttpStatus.NOT_FOUND);//en caso de no encontrarlo manda un objeto nulo y un mensaje de error
+            } else {
+                return new ResponseEntity<>(
+                        MensajeResponse.builder()
+                                .error(false)
+                                .mensaje("Encontrado")
+                                .object(
+                                        EstadoDto.builder()
+                                                .idEdo(estado.getId())
+                                                .estado(estado.getEstado())
+                                                .build()
+                                ).build()
+                        , HttpStatus.OK);
+            }
+        }catch (Exception ext){
+            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+
         }
     }
 
@@ -151,13 +164,13 @@ public class Controller {
                                     .error(true)
                                     .mensaje("No hay municipios registrados")
                                     .object(null).build(),
-                            HttpStatus.OK);
+                            HttpStatus.METHOD_NOT_ALLOWED);
                 }else{
                     List<MunicipioDto>municipiosDTO = listMunicipios.stream()
                             .map(municipio -> MunicipioDto.builder()
-                                    .idEdo(municipio.getEstado().getIdEdo())
+                                    .idEdo(municipio.getEstado().getId())
                                     .idMcpio(municipio.getId())
-                                    .Municipio(municipio.getMunicipio())
+                                    .municipio(municipio.getMunicipio())
                                     .build())
                             .collect(Collectors.toList());
                     int tamaño= municipiosDTO.size();
@@ -170,9 +183,9 @@ public class Controller {
                             ,HttpStatus.OK);
                 }
             }catch (Exception exDt){
-        return new ResponseEntity<>(
-                MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).object(null).build(),
-                HttpStatus.METHOD_NOT_ALLOWED);//el http response que mandamos sera uno de error
+                return new ResponseEntity<>(
+                    MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).object(null).build(),
+                        HttpStatus.INTERNAL_SERVER_ERROR);//el http response que mandamos sera uno de error
         }
     }
     @GetMapping("codigospostales/municipio/{idMcpio}/estado/{idEstado}")
@@ -184,7 +197,7 @@ public class Controller {
                 List<CodigoPostalDto> codigoDto;
                 codigoDto = listaCodigos.stream()
                         .map(codigopostal -> CodigoPostalDto.builder()
-                                .idEdo(codigopostal.getMunicipio().getEstado().getIdEdo())
+                                .idEdo(codigopostal.getMunicipio().getEstado().getId())
                                 .idMcpio(codigopostal.getMunicipio().getId())
                                 .estado(codigopostal.getMunicipio().getEstado().getEstado())
                                 .municipio(codigopostal.getMunicipio().getMunicipio())
@@ -198,7 +211,7 @@ public class Controller {
         }catch (Exception exDt){
             return new ResponseEntity<>(
                     MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).object(null).build(),
-                    HttpStatus.METHOD_NOT_ALLOWED);//el http response que mandamos sera uno de error
+                    HttpStatus.INTERNAL_SERVER_ERROR);//el http response que mandamos sera uno de error
         }
     }
 
@@ -213,16 +226,16 @@ public class Controller {
                         .estado(asentamiento.getCodigoPostal().getMunicipio().getEstado().getEstado())
                         .municipio(asentamiento.getCodigoPostal().getMunicipio().getMunicipio())
                         .codigoPostal(asentamiento.getCodigoPostal().getCp())
-                        .asentamiento(asentamiento.getAsenta())
+                        .asentamiento(asentamiento.getAsentamiento())
                         .build()).toList();
                 return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Asentamientos encontrados: "+asentaDto.size()).object(asentaDto).build(), HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("No se encontraron asentamientos").object(null).build(),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron asentamientos").object(null).build(),HttpStatus.NOT_FOUND);
             }
         }catch (Exception exDt){
             return new ResponseEntity<>(
                     MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).object(null).build(),
-                    HttpStatus.METHOD_NOT_ALLOWED);
+                    HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("asentamientos/municipio/{idmcpio}/estado/{idEdo}")
@@ -236,14 +249,14 @@ public class Controller {
                         .estado(asentamiento.getCodigoPostal().getMunicipio().getEstado().getEstado())
                         .municipio(asentamiento.getCodigoPostal().getMunicipio().getMunicipio())
                         .codigoPostal(asentamiento.getCodigoPostal().getCp())
-                        .asentamiento(asentamiento.getAsenta())
+                        .asentamiento(asentamiento.getAsentamiento())
                         .build()).toList();
                 return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Asentamientos encontrados: "+asentaDto.size()).object(asentaDto).build(), HttpStatus.OK);
             }else{
                 return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("No se encontraron Asentamientos").object(null).build(),HttpStatus.NOT_FOUND);
             }
         }catch (Exception exDT){
-            return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("No se encontraron asentamientos").object(null).build(),HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("No se encontraron asentamientos").object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -256,8 +269,8 @@ public class Controller {
         try{
             estadoSave=estadoService.save(estadoDto);
             estadoDto=EstadoDto.builder()
-                    .idEdo(estadoSave.getIdEdo())
-                    .Estado(estadoSave.getEstado()).build();
+                    .idEdo(estadoSave.getId())
+                    .estado(estadoSave.getEstado()).build();
             //mediante el builder del DTO guardamos toda la informacion, recoordando cerrarlo con el build()
             return new ResponseEntity<>(MensajeResponse.builder().error(false)
                     .mensaje("Guardado correctamente").object(estadoDto).build(),HttpStatus.CREATED);
@@ -276,7 +289,7 @@ public class Controller {
         Estado estadoUpdate=null;
         try{
             estadoUpdate = estadoService.save(estadoDto);//el metodo save sirve para lo mismo en este caso
-            estadoDto=EstadoDto.builder().idEdo(estadoUpdate.getIdEdo()).Estado(estadoUpdate.getEstado()).build();
+            estadoDto=EstadoDto.builder().idEdo(estadoUpdate.getId()).estado(estadoUpdate.getEstado()).build();
             //buildeamos el dto
             return new ResponseEntity<>(MensajeResponse.builder()
                     .error(false)
