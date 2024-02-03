@@ -12,5 +12,5 @@ import java.io.Serializable;
 public class MunicipioDto implements Serializable {
     private Integer idEdo;
     private Integer idMcpio;
-    private String Municipio;
+    private String municipio;
 }
