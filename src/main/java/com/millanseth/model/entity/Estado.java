@@ -20,4 +20,6 @@ public class Estado implements Serializable {
     private Integer id;
     @Column(name="estado")
     private String estado;
+    @Column(name = "abreviacion")
+    private String abreviacion;
 }
