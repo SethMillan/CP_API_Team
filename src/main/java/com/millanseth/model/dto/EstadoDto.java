@@ -12,4 +12,5 @@ public class EstadoDto implements Serializable {
 
     private Integer idEdo;
     private String estado;
+    private String edoAbrev;
 }

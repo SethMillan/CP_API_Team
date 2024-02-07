@@ -143,6 +143,7 @@ public class Controller {
                                         EstadoDto.builder()
                                                 .idEdo(estado.getId())
                                                 .estado(estado.getEstado())
+                                                .edoAbrev(estado.getAbreviacion())
                                                 .build()
                                 ).build()
                         , HttpStatus.OK);
@@ -224,6 +225,7 @@ public class Controller {
                 List<AsentamientoDto> asentaDto = asenta.stream().map(asentamiento -> AsentamientoDto
                         .builder()
                         .estado(asentamiento.getCodigoPostal().getMunicipio().getEstado().getEstado())
+                        .edoAbrev(asentamiento.getCodigoPostal().getMunicipio().getEstado().getAbreviacion())
                         .municipio(asentamiento.getCodigoPostal().getMunicipio().getMunicipio())
                         .codigoPostal(asentamiento.getCodigoPostal().getCp())
                         .asentamiento(asentamiento.getAsentamiento())
