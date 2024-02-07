@@ -262,7 +262,7 @@ public class Controller {
 
 
     //METODOS XTRA QUE NO PIDIERON JIJI
-    @PostMapping("estado")//para el metodo post solo "estado"
+    /*@PostMapping("estado")//para el metodo post solo "estado"
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<?> create (@RequestBody EstadoDto estadoDto){//retorna un response entity para el manejo de httpstatus y los mensajes en caso de errores
         Estado estadoSave=null;     //el requestbody es para que retorne un json o algo asi
@@ -318,6 +318,6 @@ public class Controller {
                     HttpStatus.METHOD_NOT_ALLOWED);//en caso de no encontrarlo manda un objeto nulo y un mensaje de error
         }
     }
-
+*/
 
 }

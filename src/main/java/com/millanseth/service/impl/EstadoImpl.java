@@ -17,11 +17,11 @@ public class EstadoImpl implements IEstado {
 
     @Transactional
     @Override
-    public Estado save(EstadoDto estadoDto) {
-        Estado estado =Estado.builder()
-                .idEdo(estadoDto.getIdEdo())
+    public Estado save(Estado estado) {
+        /*Estado estado =Estado.builder()
+                .id(estadoDto.getIdEdo())
                 .Estado(estadoDto.getEstado())
-                .build();
+                .build();*/
         return estadoDAO.save(estado);
     }
 

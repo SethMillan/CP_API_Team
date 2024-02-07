@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IEstado {
     List<Estado> listAll();
-    Estado save(EstadoDto estado);
+    Estado save(Estado estado);
     Estado findById(Integer id);
      void delete(Estado estado);
 }
