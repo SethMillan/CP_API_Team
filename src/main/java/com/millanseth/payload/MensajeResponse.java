@@ -11,5 +11,8 @@ public class MensajeResponse implements Serializable {
     private Boolean error;
     private String mensaje;
     private Object object;
-
+    private Object estado;
+    private Object municipio;
+    private Object asentamiento;
+    private Object codigoPostal;
 }
