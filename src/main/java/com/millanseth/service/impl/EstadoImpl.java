@@ -19,8 +19,8 @@ public class EstadoImpl implements IEstado {
     @Override
     public Estado save(EstadoDto estadoDto) {
         Estado estado =Estado.builder()
-                .idEdo(estadoDto.getIdEdo())
-                .Estado(estadoDto.getEstado())
+                .id(estadoDto.getIdEdo())
+                .estado(estadoDto.getEstado())
                 .build();
         return estadoDAO.save(estado);
     }
