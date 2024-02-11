@@ -21,6 +21,7 @@ public class EstadoImpl implements IEstado {
         Estado estado =Estado.builder()
                 .id(estadoDto.getIdEdo())
                 .estado(estadoDto.getEstado())
+                .abrev(estadoDto.getAbrev())
                 .build();
         return estadoDAO.save(estado);
     }
