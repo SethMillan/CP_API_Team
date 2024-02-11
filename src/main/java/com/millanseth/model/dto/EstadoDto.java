@@ -1,7 +1,6 @@
 package com.millanseth.model.dto;
 
 
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
@@ -12,5 +11,6 @@ import java.io.Serializable;
 public class EstadoDto implements Serializable {
 
     private Integer idEdo;
-    private String Estado;
+    private String estado;
+    private String abrev;
 }

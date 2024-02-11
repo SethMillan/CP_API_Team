@@ -11,14 +11,14 @@ import java.io.Serializable;
 @ToString
 @Builder
 @Entity
-@Table(name = "tablamcpio")
+@Table(name = "municipios")
 public class Municipio implements Serializable {
     @Id
-    @Column(name="id_mcpio")
+    @Column(name="municipio_id")
     private Integer id;
-    @Column(name="mcpio")
-    private String Municipio;
+    @Column(name="municipio")
+    private String municipio;
     @ManyToOne
-    @JoinColumn(name="id_Edo")
+    @JoinColumn(name="estado_id")
     private Estado estado;
 }

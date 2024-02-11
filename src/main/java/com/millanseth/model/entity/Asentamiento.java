@@ -10,14 +10,14 @@ import lombok.*;
 @ToString
 @Builder
 @Entity
-@Table(name = "tablaasenta")
+@Table(name = "asentamientos")
 public class Asentamiento {
     @Id
-    @Column(name="Asenta")
+    @Column(name="asentamiento")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String asenta;
+    private String asentamiento;
 
     @ManyToOne
-    @JoinColumn(name="CP")
+    @JoinColumn(name="codigo_postal")
     private CodigoPostal codigoPostal;
 }

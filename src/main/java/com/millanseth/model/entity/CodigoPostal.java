@@ -10,12 +10,12 @@ import lombok.*;
 @ToString
 @Builder
 @Entity
-@Table(name="tablacp")
+@Table(name="codigos_postales")
 public class CodigoPostal {
     @Id
-    @Column(name="CP")
+    @Column(name="codigo_postal")
     private Integer cp;
     @ManyToOne
-    @JoinColumn(name="id_Mcpio")
+    @JoinColumn(name="municipio_id")
     private Municipio municipio;
 }
