@@ -159,7 +159,7 @@ public class Controller {
     public ResponseEntity<?> mostrarMcpios(@PathVariable Integer id){
            try{
                List<Municipio> listMunicipios = municipioService.listAllById(id);
-                if (listMunicipios==null){
+                if (listMunicipios.isEmpty()){
                     return new ResponseEntity<>(
                             MensajeResponse.builder()
                                     .error(true)
@@ -174,11 +174,11 @@ public class Controller {
                                     .municipio(municipio.getMunicipio())
                                     .build())
                             .collect(Collectors.toList());
-                    int tamaño= municipiosDTO.size();
+                    int size= municipiosDTO.size();
                     return new ResponseEntity<>(
                             MensajeResponse.builder()
                                     .error(false)
-                                    .mensaje("Municipios encontrados : "+tamaño)
+                                    .mensaje("Municipios encontrados : "+size)
                                     .municipios(municipiosDTO)
                                     .build()
                             ,HttpStatus.OK);
@@ -194,7 +194,7 @@ public class Controller {
     public ResponseEntity<?>showFilterCP(@PathVariable Integer idEstado, @PathVariable Integer idMcpio){
         try {
             List<CodigoPostal> listaCodigos = codigoService.listAllById(idMcpio, idEstado);
-            if(listaCodigos!=null) {
+            if(!listaCodigos.isEmpty()) {
                 List<CodigoPostalDto> codigoDto;
                 codigoDto = listaCodigos.stream()
                         .map(codigopostal -> CodigoPostalDto.builder()
@@ -207,7 +207,7 @@ public class Controller {
                         .collect(Collectors.toList());
                 return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Numero de CP encontrados : " + codigoDto.size()).codigosPostales(codigoDto).build(), HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron codigos postales en ese municipio").codigoPostal(null).build(),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron codigos postales").codigoPostal(null).build(),HttpStatus.NOT_FOUND);
             }
         }catch (Exception exDt){
             return new ResponseEntity<>(
@@ -221,7 +221,7 @@ public class Controller {
     public ResponseEntity<?> showFilterAsenta(@PathVariable Integer id){
         try {
             List<Asentamiento> asenta = asentamientoService.listAllById(id);//aqui obviamente hay un error por lo  ya mencionado
-            if(asenta!=null) {
+            if(!asenta.isEmpty()) {
                 List<AsentamientoDto> asentaDto = asenta.stream().map(asentamiento -> AsentamientoDto
                         .builder()
                         .estado(asentamiento.getCodigoPostal().getMunicipio().getEstado().getEstado())
@@ -244,7 +244,7 @@ public class Controller {
     public ResponseEntity<?>showCPFilteredByEdoAndMcpio(@PathVariable Integer idmcpio, @PathVariable Integer idEdo){
         try{
             List<Asentamiento> asentamientosLista =asentamientoService.findCPByMcpioAndEdo(idmcpio,idEdo);
-            if(asentamientosLista!=null){
+            if(!asentamientosLista.isEmpty()){
                 List<AsentamientoDto> asentaDto = asentamientosLista.stream().map(asentamiento -> AsentamientoDto
                         .builder()
                         .estado(asentamiento.getCodigoPostal().getMunicipio().getEstado().getEstado())
@@ -254,10 +254,10 @@ public class Controller {
                         .build()).toList();
                 return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Asentamientos encontrados: "+asentaDto.size()).asentamientos(asentaDto).build(), HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("No se encontraron Asentamientos").asentamiento(null).build(),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron Asentamientos").asentamiento(null).build(),HttpStatus.NOT_FOUND);
             }
         }catch (Exception exDT){
-            return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("No se encontraron asentamientos").asentamiento(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron asentamientos").asentamiento(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
