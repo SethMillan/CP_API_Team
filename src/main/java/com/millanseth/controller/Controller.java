@@ -8,7 +8,7 @@ import com.millanseth.model.entity.Asentamiento;
 import com.millanseth.model.entity.CodigoPostal;
 import com.millanseth.model.entity.Estado;
 import com.millanseth.model.entity.Municipio;
-import com.millanseth.payload.MensajeResponse;
+import com.millanseth.payload.MensajeResponseEstado;
 import com.millanseth.service.IAsentamiento;
 import com.millanseth.service.ICodigoPostal;
 import com.millanseth.service.IEstado;
@@ -41,14 +41,14 @@ public class Controller {
         List<Estado> listaEstados= estadoService.listAll();
         if (listaEstados==null){
             return new ResponseEntity<>(
-                    MensajeResponse.builder()
+                    MensajeResponseEstado.builder()
                             .error(false)
                             .mensaje("No hay estados registrados")
                             .estado(null).build(),
                     HttpStatus.OK);
         }else {
             return new ResponseEntity<>(
-                    MensajeResponse.builder()
+                    MensajeResponseEstado.builder()
                             .error(false)
                             .mensaje("Estados encontrados :" + listaEstados.size())
                             .estados(listaEstados)
@@ -56,7 +56,7 @@ public class Controller {
                     , HttpStatus.OK);
         }
         }catch(Exception exDt){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+exDt).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("Error encontrado "+exDt).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("municipios")
@@ -66,14 +66,14 @@ public class Controller {
         List<MunicipioDto> listaMunicipios= municipioService.listAll().stream().map(municipio -> MunicipioDto.builder().idEdo(municipio.getEstado().getId()).idMcpio(municipio.getId()).municipio(municipio.getMunicipio()).build()).toList();
         if (listaMunicipios==null){
             return new ResponseEntity<>(
-                    MensajeResponse.builder()
+                    MensajeResponseEstado.builder()
                             .error(false)
                             .mensaje("No hay estados registrados")
                             .municipio(null).build(),
                     HttpStatus.OK);
         }else{
             return new ResponseEntity<>(
-                    MensajeResponse.builder()
+                    MensajeResponseEstado.builder()
                             .error(false)
                             .mensaje("Estados encontrados : "+listaMunicipios.size())
                             .municipios(listaMunicipios)
@@ -81,7 +81,7 @@ public class Controller {
                     ,HttpStatus.OK);
         }
         }catch (Exception ext){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("Error encontrado "+ext).object(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("codigospostales")
@@ -98,9 +98,9 @@ public class Controller {
                             .codigoPostal(codigoPostal.getCp())
                             .build()
                     ).toList();
-            return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Codigos totales "+listaDto.size()).codigosPostales(listaDto).build(),HttpStatus.OK);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(false).mensaje("Codigos totales "+listaDto.size()).codigosPostales(listaDto).build(),HttpStatus.OK);
         }catch (Exception ext ){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).codigoPostal(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("Error encontrado "+ext).codigoPostal(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("asentamientos")
@@ -116,9 +116,9 @@ public class Controller {
                             .asentamiento(asentamiento.getAsentamiento())
                             .build()
                     ).toList();
-            return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Codigos totales "+listaDto.size()).asentamientos(listaDto).build(),HttpStatus.OK);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(false).mensaje("Codigos totales "+listaDto.size()).asentamientos(listaDto).build(),HttpStatus.OK);
         }catch (Exception ext ){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).asentamiento(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("Error encontrado "+ext).asentamiento(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -132,11 +132,11 @@ public class Controller {
             Estado estado = estadoService.findById(id);
             if (estado == null) {
                 return new ResponseEntity<>(
-                        MensajeResponse.builder().error(true).mensaje("El registro que intenta buscar no existe").estado(null).build(),
+                        MensajeResponseEstado.builder().error(true).mensaje("El registro que intenta buscar no existe").estado(null).build(),
                         HttpStatus.NOT_FOUND);//en caso de no encontrarlo manda un objeto nulo y un mensaje de error
             } else {
                 return new ResponseEntity<>(
-                        MensajeResponse.builder()
+                        MensajeResponseEstado.builder()
                                 .error(false)
                                 .mensaje("Encontrado")
                                 .estado(
@@ -149,7 +149,7 @@ public class Controller {
                         , HttpStatus.OK);
             }
         }catch (Exception ext){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("Error encontrado "+ext).estado(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("Error encontrado "+ext).estado(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
 
         }
     }
@@ -161,7 +161,7 @@ public class Controller {
                List<Municipio> listMunicipios = municipioService.listAllById(id);
                 if (listMunicipios.isEmpty()){
                     return new ResponseEntity<>(
-                            MensajeResponse.builder()
+                            MensajeResponseEstado.builder()
                                     .error(true)
                                     .mensaje("No hay municipios registrados")
                                     .municipio(null).build(),
@@ -176,7 +176,7 @@ public class Controller {
                             .collect(Collectors.toList());
                     int size= municipiosDTO.size();
                     return new ResponseEntity<>(
-                            MensajeResponse.builder()
+                            MensajeResponseEstado.builder()
                                     .error(false)
                                     .mensaje("Municipios encontrados : "+size)
                                     .municipios(municipiosDTO)
@@ -185,7 +185,7 @@ public class Controller {
                 }
             }catch (Exception exDt){
                 return new ResponseEntity<>(
-                    MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).municipio(null).build(),
+                    MensajeResponseEstado.builder().error(true).mensaje(exDt.getMessage()).municipio(null).build(),
                         HttpStatus.INTERNAL_SERVER_ERROR);//el http response que mandamos sera uno de error
         }
     }
@@ -205,13 +205,13 @@ public class Controller {
                                 .codigoPostal(codigopostal.getCp())
                                 .build())
                         .collect(Collectors.toList());
-                return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Numero de CP encontrados : " + codigoDto.size()).codigosPostales(codigoDto).build(), HttpStatus.OK);
+                return new ResponseEntity<>(MensajeResponseEstado.builder().error(false).mensaje("Numero de CP encontrados : " + codigoDto.size()).codigosPostales(codigoDto).build(), HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron codigos postales").codigoPostal(null).build(),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("No se encontraron codigos postales").codigoPostal(null).build(),HttpStatus.NOT_FOUND);
             }
         }catch (Exception exDt){
             return new ResponseEntity<>(
-                    MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).codigoPostal(null).build(),
+                    MensajeResponseEstado.builder().error(true).mensaje(exDt.getMessage()).codigoPostal(null).build(),
                     HttpStatus.INTERNAL_SERVER_ERROR);//el http response que mandamos sera uno de error
         }
     }
@@ -229,13 +229,13 @@ public class Controller {
                         .codigoPostal(asentamiento.getCodigoPostal().getCp())
                         .asentamiento(asentamiento.getAsentamiento())
                         .build()).toList();
-                return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Asentamientos encontrados: "+asentaDto.size()).asentamientos(asentaDto).build(), HttpStatus.OK);
+                return new ResponseEntity<>(MensajeResponseEstado.builder().error(false).mensaje("Asentamientos encontrados: "+asentaDto.size()).asentamientos(asentaDto).build(), HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron asentamientos").asentamiento(null).build(),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("No se encontraron asentamientos").asentamiento(null).build(),HttpStatus.NOT_FOUND);
             }
         }catch (Exception exDt){
             return new ResponseEntity<>(
-                    MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).asentamiento(null).build(),
+                    MensajeResponseEstado.builder().error(true).mensaje(exDt.getMessage()).asentamiento(null).build(),
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -252,12 +252,12 @@ public class Controller {
                         .codigoPostal(asentamiento.getCodigoPostal().getCp())
                         .asentamiento(asentamiento.getAsentamiento())
                         .build()).toList();
-                return new ResponseEntity<>(MensajeResponse.builder().error(false).mensaje("Asentamientos encontrados: "+asentaDto.size()).asentamientos(asentaDto).build(), HttpStatus.OK);
+                return new ResponseEntity<>(MensajeResponseEstado.builder().error(false).mensaje("Asentamientos encontrados: "+asentaDto.size()).asentamientos(asentaDto).build(), HttpStatus.OK);
             }else{
-                return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron Asentamientos").asentamiento(null).build(),HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("No se encontraron Asentamientos").asentamiento(null).build(),HttpStatus.NOT_FOUND);
             }
         }catch (Exception exDT){
-            return new ResponseEntity<>(MensajeResponse.builder().error(true).mensaje("No se encontraron asentamientos").asentamiento(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("No se encontraron asentamientos").asentamiento(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -273,12 +273,12 @@ public class Controller {
                     .idEdo(estadoSave.getId())
                     .estado(estadoSave.getEstado()).build();
             //mediante el builder del DTO guardamos toda la informacion, recoordando cerrarlo con el build()
-            return new ResponseEntity<>(MensajeResponse.builder().error(false)
+            return new ResponseEntity<>(MensajeResponseEstado.builder().error(false)
                     .mensaje("Guardado correctamente").estado(estadoDto).build(),HttpStatus.CREATED);
             //aqui retornamos el response entity con el mensajeresponse y el objeto que acabamos de buildear
         }catch (DataAccessException exDt){//aqui atrapamos el error en caso de haber
             return new ResponseEntity<>(
-                    MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).estado(null).build(),
+                    MensajeResponseEstado.builder().error(true).mensaje(exDt.getMessage()).estado(null).build(),
                     HttpStatus.METHOD_NOT_ALLOWED);//el http response que mandamos sera uno de error
         }
     }
@@ -292,7 +292,7 @@ public class Controller {
             estadoUpdate = estadoService.save(estadoDto);//el metodo save sirve para lo mismo en este caso
             estadoDto=EstadoDto.builder().idEdo(estadoUpdate.getId()).estado(estadoUpdate.getEstado()).build();
             //buildeamos el dto
-            return new ResponseEntity<>(MensajeResponse.builder()
+            return new ResponseEntity<>(MensajeResponseEstado.builder()
                     .error(false)
                     .mensaje("Actualizado correctamente")
                     .estado(estadoDto).build()
@@ -300,7 +300,7 @@ public class Controller {
             //retornamos el response entity con un mensajeresponse y un mensaje de todo correcto y el objeto que buildeamos
         }catch (DataAccessException exDt){
             return new ResponseEntity<>(
-                    MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).estado(null).build(),
+                    MensajeResponseEstado.builder().error(true).mensaje(exDt.getMessage()).estado(null).build(),
                     HttpStatus.METHOD_NOT_ALLOWED);//aqui mandamos la respuesta negativa y el error que se atrapo
         }
     }
@@ -315,7 +315,7 @@ public class Controller {
             return new ResponseEntity<>(estadoDelete,HttpStatus.NO_CONTENT);
         }catch (DataAccessException exDt){
             return new ResponseEntity<>(
-                    MensajeResponse.builder().error(true).mensaje(exDt.getMessage()).estado(null).build(),
+                    MensajeResponseEstado.builder().error(true).mensaje(exDt.getMessage()).estado(null).build(),
                     HttpStatus.METHOD_NOT_ALLOWED);//en caso de no encontrarlo manda un objeto nulo y un mensaje de error
         }
     }
