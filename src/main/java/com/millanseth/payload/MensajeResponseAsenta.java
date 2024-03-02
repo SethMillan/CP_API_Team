@@ -1,4 +1,16 @@
 package com.millanseth.payload;
 
-public class MensajeResponseAsenta {
+import lombok.Builder;
+import lombok.Data;
+import lombok.ToString;
+
+import java.io.Serializable;
+@Data
+@ToString
+@Builder
+
+public class MensajeResponseAsenta implements Serializable {
+    private Boolean error;
+    private String mensaje;
+    private Object asentamiento;
 }
