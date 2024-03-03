@@ -69,7 +69,7 @@ public class Controller {
         List<MunicipioDto> listaMunicipios= municipioService.listAll().stream().map(municipio -> MunicipioDto.builder().idEdo(municipio.getEstado().getId()).idMcpio(municipio.getId()).municipio(municipio.getMunicipio()).build()).toList();
         if (listaMunicipios==null){
             return new ResponseEntity<>(
-                    MensajeResponseEstado.builder()
+                    MensajeResponseMunicipio.builder()
                             .error(false)
                             .mensaje("No hay estados registrados")
                             .municipio(null).build(),
@@ -84,7 +84,7 @@ public class Controller {
                     ,HttpStatus.OK);
         }
         }catch (Exception ext){
-            return new ResponseEntity<>(MensajeResponseEstado.builder().error(true).mensaje("Error encontrado "+ext).municipio(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(MensajeResponseMunicipio.builder().error(true).mensaje("Error encontrado "+ext).municipio(null).build(),HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
     @GetMapping("codigospostales")
